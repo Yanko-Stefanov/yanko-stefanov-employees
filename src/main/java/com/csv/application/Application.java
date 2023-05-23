@@ -1,7 +1,5 @@
 package com.csv.application;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
@@ -36,7 +34,6 @@ public class Application {
                 }
                 String[] data = line.split(",");
                 String empID = data[0].trim();
-                LocalDate dateFrom = parseDate(data[2].trim());
                 LocalDate dateTo = data[3].trim().equalsIgnoreCase("NULL") ? LocalDate.now() : parseDate(data[3].trim());
 
                 if (!employeeProjects.containsKey(empID)) {
@@ -84,5 +81,4 @@ public class Application {
         }
         throw new IllegalArgumentException("Invalid date format: " + dateString);
     }
-
 }
