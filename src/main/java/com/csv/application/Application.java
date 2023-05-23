@@ -54,7 +54,7 @@ public class Application {
         for (Map.Entry<String, LocalDate> entry1 : employeeProjects.entrySet()) {
             for (Map.Entry<String, LocalDate> entry2 : employeeProjects.entrySet()) {
                 if (!entry1.getKey().equals(entry2.getKey())) {
-                    long duration = ChronoUnit.MONTHS.between(entry1.getValue(), entry2.getValue());
+                    long duration = ChronoUnit.YEARS.between(entry1.getValue(), entry2.getValue());
                     if (duration > maxDuration) {
                         maxDuration = duration;
                         employee1 = entry1.getKey();
