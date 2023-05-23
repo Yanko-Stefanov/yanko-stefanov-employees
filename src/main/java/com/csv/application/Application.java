@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,11 @@ import java.util.Map;
 @SpringBootApplication
 public class Application {
 
-    private static Logger logger = LoggerFactory.getLogger(Application.class);
+    private static final String[] DATE_FORMATS = {
+            "yyyy-MM-dd",
+            "MM/dd/yyyy",
+            "dd-MMM-yyyy"
+    };
 
     public static void main(String[] args) {
         String csvFilePath = "/Users/sofiabodurova/Downloads/csv-reader/src/main/resources/emoloyee.csv";
@@ -31,8 +36,8 @@ public class Application {
                 }
                 String[] data = line.split(",");
                 String empID = data[0].trim();
-                LocalDate dateFrom = LocalDate.parse(data[2].trim());
-                LocalDate dateTo = data[3].trim().equalsIgnoreCase("NULL") ? LocalDate.now() : LocalDate.parse(data[3].trim());
+                LocalDate dateFrom = parseDate(data[2].trim());
+                LocalDate dateTo = data[3].trim().equalsIgnoreCase("NULL") ? LocalDate.now() : parseDate(data[3].trim());
 
                 if (!employeeProjects.containsKey(empID)) {
                     employeeProjects.put(empID, dateTo);
@@ -66,6 +71,18 @@ public class Application {
 
         System.out.println("Employees with the longest common project duration:");
         System.out.println(employee1 + ", " + employee2 + ", " + maxDuration);
+    }
+
+    private static LocalDate parseDate(String dateString) {
+        for (String dateFormat : DATE_FORMATS) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+                return LocalDate.parse(dateString, formatter);
+            } catch (Exception e) {
+                // Date format doesn't match, try the next one
+            }
+        }
+        throw new IllegalArgumentException("Invalid date format: " + dateString);
     }
 
 }
